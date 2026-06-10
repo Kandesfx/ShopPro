@@ -1,0 +1,347 @@
+// This is your Prisma schema file for documentation purposes
+// The actual database implementation uses better-sqlite3 with raw SQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   Int            @id @default(autoincrement())
+  username              String         @unique
+  email                String         @unique
+  password_hash        String
+  phone                String?
+  full_name            String?
+  role                 String         @default("customer")
+  avatar               String?
+  is_active            Int            @default(1)
+  failed_login_attempts Int            @default(0)
+  locked_until         String?
+  created_at           String         @default(now())
+  updated_at           String         @default(now())
+
+  employee             Employee?
+  refreshTokens        RefreshToken[]
+  auditLogs            AuditLog[]
+}
+
+model Employee {
+  id             Int      @id @default(autoincrement())
+  user_id        Int      @unique
+  staff_code     String   @unique
+  position       String
+  hire_date      String
+  commission_rate Float   @default(0)
+  is_active      Int      @default(1)
+
+  user           User     @relation(fields: [user_id], references: [id])
+  orders         Order[]
+}
+
+model Category {
+  id          Int        @id @default(autoincrement())
+  parent_id   Int?
+  name        String
+  slug        String     @unique
+  description String?
+  image       String?
+  sort_order  Int        @default(0)
+  is_active   Int        @default(1)
+  created_at  String     @default(now())
+  updated_at  String     @default(now())
+
+  parent      Category?  @relation("CategoryParent", fields: [parent_id], references: [id])
+  children    Category[] @relation("CategoryParent")
+  products    Product[]
+}
+
+model Brand {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  logo        String?
+  description String?
+  is_active   Int       @default(1)
+
+  products    Product[]
+}
+
+model Product {
+  id            Int              @id @default(autoincrement())
+  sku           String           @unique
+  name          String
+  slug          String           @unique
+  description   String?
+  category_id   Int?
+  brand_id      Int?
+  cost_price    Float            @default(0)
+  retail_price  Float            @default(0)
+  wholesale_price Float          @default(0)
+  barcode       String?          @unique
+  weight        Float?
+  images        String?
+  status        String           @default("active")
+  view_count    Int              @default(0)
+  sold_count    Int              @default(0)
+  created_at    String           @default(now())
+  updated_at    String           @default(now())
+
+  category      Category?        @relation(fields: [category_id], references: [id])
+  brand         Brand?           @relation(fields: [brand_id], references: [id])
+  variants      ProductVariant[]
+  orderItems    OrderItem[]
+  reviews       ProductReview[]
+}
+
+model ProductVariant {
+  id             Int        @id @default(autoincrement())
+  product_id     Int
+  sku            String     @unique
+  barcode        String?    @unique
+  size           String?
+  color          String?
+  color_hex      String?
+  price_override Float?
+  status         String     @default("active")
+  created_at     String     @default(now())
+
+  product        Product    @relation(fields: [product_id], references: [id])
+  inventory      Inventory?
+  orderItems     OrderItem[]
+  inventoryMovements InventoryMovement[]
+}
+
+model Inventory {
+  id              Int       @id @default(autoincrement())
+  variant_id      Int       @unique
+  quantity        Int       @default(0)
+  reserved        Int       @default(0)
+  min_stock_level Int       @default(5)
+  max_stock_level Int       @default(100)
+  updated_at      String    @default(now())
+
+  variant         ProductVariant @relation(fields: [variant_id], references: [id])
+}
+
+model InventoryMovement {
+  id              Int       @id @default(autoincrement())
+  variant_id      Int
+  movement_type   String
+  quantity_change Int
+  quantity_before Int
+  quantity_after  Int
+  reference_type  String?
+  reference_id    Int?
+  reason          String?
+  created_by      Int?
+  created_at      String    @default(now())
+
+  variant         ProductVariant @relation(fields: [variant_id], references: [id])
+  creator         User?         @relation(fields: [created_by], references: [id])
+}
+
+model Customer {
+  id              Int       @id @default(autoincrement())
+  user_id         Int?
+  full_name       String
+  phone           String
+  email           String?
+  gender          String?
+  date_of_birth   String?
+  customer_type   String    @default("regular")
+  total_spent     Float     @default(0)
+  total_orders    Int       @default(0)
+  loyalty_points  Int       @default(0)
+  loyalty_tier    String    @default("bronze")
+  referral_code   String?   @unique
+  created_at      String    @default(now())
+  updated_at      String    @default(now())
+
+  user            User?     @relation(fields: [user_id], references: [id])
+  orders          Order[]
+  reviews         ProductReview[]
+}
+
+model Order {
+  id                      Int        @id @default(autoincrement())
+  order_number            String     @unique
+  customer_id             Int?
+  staff_id                Int?
+  order_type              String
+  status                  String     @default("pending")
+  subtotal                Float      @default(0)
+  discount_amount         Float      @default(0)
+  promotion_id            Int?
+  tax_amount              Float      @default(0)
+  shipping_fee            Float      @default(0)
+  total_amount            Float      @default(0)
+  paid_amount             Float      @default(0)
+  change_amount           Float      @default(0)
+  payment_method          String     @default("cash")
+  payment_status          String     @default("pending")
+  shipping_full_name      String?
+  shipping_phone          String?
+  shipping_address        String?
+  payment_transaction_id  String?
+  note                    String?
+  ordered_at              String     @default(now())
+  confirmed_at            String?
+  shipped_at              String?
+  delivered_at            String?
+  completed_at            String?
+  cancelled_at            String?
+  cancel_reason           String?
+  store_id                Int?
+  created_at              String     @default(now())
+  updated_at              String     @default(now())
+
+  customer                Customer?  @relation(fields: [customer_id], references: [id])
+  staff                   Employee?  @relation(fields: [staff_id], references: [id])
+  promotion               Promotion? @relation(fields: [promotion_id], references: [id])
+  items                   OrderItem[]
+  payments                Payment[]
+}
+
+model OrderItem {
+  id               Int       @id @default(autoincrement())
+  order_id         Int
+  product_id       Int
+  variant_id       Int
+  product_name     String
+  sku              String
+  quantity         Int       @default(1)
+  unit_price       Float
+  cost_price       Float     @default(0)
+  discount_amount  Float     @default(0)
+  line_total       Float
+  returned_quantity Int      @default(0)
+
+  order            Order     @relation(fields: [order_id], references: [id])
+  product          Product   @relation(fields: [product_id], references: [id])
+  variant          ProductVariant @relation(fields: [variant_id], references: [id])
+}
+
+model Promotion {
+  id                   Int      @id @default(autoincrement())
+  code                 String   @unique
+  name                 String
+  type                 String
+  value                Float
+  max_discount         Float?
+  min_order_amount     Float    @default(0)
+  max_uses             Int      @default(0)
+  max_uses_per_customer Int     @default(1)
+  current_uses         Int      @default(0)
+  start_date           String
+  end_date             String
+  applicable_type      String   @default("all")
+  applicable_ids       String?
+  is_active            Int      @default(1)
+  is_public            Int      @default(0)
+  priority             Int      @default(0)
+  created_at           String   @default(now())
+
+  orders               Order[]
+}
+
+model Supplier {
+  id           Int       @id @default(autoincrement())
+  name         String
+  code         String    @unique
+  contact_name String?
+  email        String?
+  phone        String?
+  address      String?
+  is_active    Int       @default(1)
+  created_at   String    @default(now())
+
+  purchaseOrders PurchaseOrder[]
+}
+
+model PurchaseOrder {
+  id             Int       @id @default(autoincrement())
+  po_number      String    @unique
+  supplier_id    Int
+  status         String    @default("draft")
+  subtotal      Float     @default(0)
+  total_amount  Float     @default(0)
+  note          String?
+  approved_by    Int?
+  received_date  String?
+  created_at    String    @default(now())
+
+  supplier       Supplier  @relation(fields: [supplier_id], references: [id])
+  items          PurchaseOrderItem[]
+}
+
+model PurchaseOrderItem {
+  id                 Int      @id @default(autoincrement())
+  purchase_order_id  Int
+  product_id         Int
+  variant_id         Int?
+  quantity           Int
+  unit_cost          Float
+  line_total         Float
+
+  purchaseOrder      PurchaseOrder @relation(fields: [purchase_order_id], references: [id])
+}
+
+model Payment {
+  id              Int      @id @default(autoincrement())
+  order_id        Int
+  payment_method  String
+  amount          Float
+  status          String   @default("pending")
+  transaction_id  String?
+  paid_at         String?
+  created_at      String   @default(now())
+
+  order           Order    @relation(fields: [order_id], references: [id])
+}
+
+model ProductReview {
+  id          Int       @id @default(autoincrement())
+  product_id  Int
+  customer_id Int
+  order_id    Int?
+  rating      Int
+  title       String?
+  content     String?
+  is_visible  Int       @default(1)
+  created_at  String    @default(now())
+
+  product     Product   @relation(fields: [product_id], references: [id])
+  customer    Customer  @relation(fields: [customer_id], references: [id])
+}
+
+model RefreshToken {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  token       String   @unique
+  device_info String?
+  ip_address  String?
+  expires_at  String
+  revoked_at  String?
+  created_at  String   @default(now())
+
+  user        User     @relation(fields: [user_id], references: [id])
+}
+
+model AuditLog {
+  id         Int       @id @default(autoincrement())
+  user_id    Int?
+  action     String
+  table_name String?
+  record_id  Int?
+  old_values String?
+  new_values String?
+  ip_address String?
+  created_at String    @default(now())
+
+  user       User?     @relation(fields: [user_id], references: [id])
+}

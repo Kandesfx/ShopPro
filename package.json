@@ -1,0 +1,16 @@
+{
+  "name": "shoppro",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend/apps/website && npm install && cd ../admin && npm install && cd ../pos && npm install",
+    "dev": "npm run dev:backend",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:website": "cd frontend/apps/website && npm run dev",
+    "dev:admin": "cd frontend/apps/admin && npm run dev",
+    "dev:pos": "cd frontend/apps/pos && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
