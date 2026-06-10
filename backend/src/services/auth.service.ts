@@ -29,15 +29,17 @@ export class AuthService {
     const passwordHash = await bcrypt.hash(password, 10);
 
     // Create user
-    const result = db.prepare(`
+    db.prepare(`
       INSERT INTO users (username, email, password_hash, full_name, phone, role)
       VALUES (?, ?, ?, ?, ?, 'customer')
     `).run(username, email, passwordHash, full_name || null, phone || null);
 
-    const userId = result.lastInsertRowid as number;
+    // Get user by username (safer than relying on lastInsertRowid)
+    const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username) as User | undefined;
 
-    // Get user
-    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId) as User;
+    if (!user) {
+      throw new Error('Failed to create user');
+    }
 
     // Generate tokens
     const tokens = this.generateTokens(user);
@@ -49,7 +51,7 @@ export class AuthService {
     db.prepare(`
       INSERT INTO customers (user_id, full_name, phone, email)
       VALUES (?, ?, ?, ?)
-    `).run(userId, full_name || username, phone || null, email);
+    `).run(user.id, full_name || username, phone || null, email);
 
     return {
       user: this.sanitizeUser(user),
