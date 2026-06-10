@@ -473,6 +473,64 @@ export const seedDatabase = async () => {
   wrapper.prepare(`INSERT INTO products (id, sku, name, slug, description, category_id, brand_id, cost_price, retail_price, wholesale_price, barcode, weight, images, status, view_count, sold_count) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(5, 'PUMA-RSX-001', 'Puma RS-X', 'puma-rs-x', 'Takes extreme to another level', 3, 3, 1100000, 1890000, 1500000, generateBarcode(), 360, '["https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800"]', 'active', 650, 42);
   wrapper.prepare(`INSERT INTO products (id, sku, name, slug, description, category_id, brand_id, cost_price, retail_price, wholesale_price, barcode, weight, images, status, view_count, sold_count) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(6, 'NB-574-001', 'New Balance 574', 'new-balance-574', 'The quintessential New Balance sneaker', 2, 4, 1000000, 1790000, 1430000, generateBarcode(), 390, '["https://images.unsplash.com/photo-1539185441755-769473a23570?w=800"]', 'active', 890, 78);
 
+  // Products (IDs 7-50) - additional products
+  const productSeedData = [
+    { id: 7, sku: 'NIKE-AM90-001', name: 'Nike Air Max 90', slug: 'nike-air-max-90-7', category_id: 1, brand_id: 1, cost: 1400000, retail: 2490000, images: '["https://images.unsplash.com/photo-1605348532760-6753d2c43329?w=800"]' },
+    { id: 8, sku: 'NIKE-PEG-001', name: 'Nike Pegasus 40', slug: 'nike-pegasus-40-8', category_id: 1, brand_id: 1, cost: 1600000, retail: 2790000, images: '["https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800"]' },
+    { id: 9, sku: 'NIKE-REV-001', name: 'Nike Revolution 6', slug: 'nike-revolution-6-9', category_id: 1, brand_id: 1, cost: 900000, retail: 1590000, images: '["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800"]' },
+    { id: 10, sku: 'NIKE-DUNK-001', name: 'Nike Dunk Low', slug: 'nike-dunk-low-10', category_id: 2, brand_id: 1, cost: 1100000, retail: 1990000, images: '["https://images.unsplash.com/photo-1597045566677-8cf032ed6634?w=800"]' },
+    { id: 11, sku: 'NIKE-BLAZER-001', name: "Nike Blazer Mid '77", slug: 'nike-blazer-mid-77-11', category_id: 2, brand_id: 1, cost: 1000000, retail: 1790000, images: '["https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800"]' },
+    { id: 12, sku: 'NIKE-AF1L-001', name: "Nike Air Force 1 Low '07 LV8", slug: 'nike-air-force-1-low-07-lv8-12', category_id: 2, brand_id: 1, cost: 1050000, retail: 1890000, images: '["https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=800"]' },
+    { id: 13, sku: 'NIKE-JRD-001', name: 'Nike Jordan Delta 3', slug: 'nike-jordan-delta-3-13', category_id: 3, brand_id: 1, cost: 2200000, retail: 3790000, images: '["https://images.unsplash.com/photo-1612902456551-333ac5afa26e?w=800"]' },
+    { id: 14, sku: 'NIKE-VAPOR-001', name: 'Nike Vaporfly 3', slug: 'nike-vaporfly-3-14', category_id: 1, brand_id: 1, cost: 3200000, retail: 5290000, images: '["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800"]' },
+    { id: 15, sku: 'NIKE-TN-001', name: 'Nike Air Max Plus', slug: 'nike-air-max-plus-15', category_id: 3, brand_id: 1, cost: 2100000, retail: 3590000, images: '["https://images.unsplash.com/photo-1605348532760-6753d2c43329?w=800"]' },
+    { id: 16, sku: 'ADI-NMD-001', name: 'Adidas NMD_R1', slug: 'adidas-nmd-r1-16', category_id: 2, brand_id: 2, cost: 1500000, retail: 2690000, images: '["https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800"]' },
+    { id: 17, sku: 'ADI-STM-001', name: 'Adidas Stan Smith', slug: 'adidas-stan-smith-17', category_id: 2, brand_id: 2, cost: 850000, retail: 1490000, images: '["https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800"]' },
+    { id: 18, sku: 'ADI-SUP-001', name: 'Adidas Superstar', slug: 'adidas-superstar-18', category_id: 2, brand_id: 2, cost: 900000, retail: 1590000, images: '["https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800"]' },
+    { id: 19, sku: 'ADI-ZX-001', name: 'Adidas ZX 500', slug: 'adidas-zx-500-19', category_id: 2, brand_id: 2, cost: 1300000, retail: 2290000, images: '["https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800"]' },
+    { id: 20, sku: 'ADI-GAZ-001', name: 'Adidas Gazelle', slug: 'adidas-gazelle-20', category_id: 2, brand_id: 2, cost: 1000000, retail: 1790000, images: '["https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800"]' },
+    { id: 21, sku: 'ADI-FO-001', name: 'Adidas Forum Low', slug: 'adidas-forum-low-21', category_id: 3, brand_id: 2, cost: 1400000, retail: 2490000, images: '["https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800"]' },
+    { id: 22, sku: 'ADI-UB23-001', name: 'Adidas Ultraboost Light', slug: 'adidas-ultraboost-light-22', category_id: 1, brand_id: 2, cost: 2100000, retail: 3490000, images: '["https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800"]' },
+    { id: 23, sku: 'ADI-FOAM-001', name: 'Adidas 4DFWD 3', slug: 'adidas-4dfwd-3-23', category_id: 1, brand_id: 2, cost: 2500000, retail: 4190000, images: '["https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800"]' },
+    { id: 24, sku: 'ADI-ZNE-001', name: 'Adidas 4KRFT', slug: 'adidas-4krft-24', category_id: 3, brand_id: 2, cost: 1200000, retail: 2090000, images: '["https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800"]' },
+    { id: 25, sku: 'PUMA-SFT-001', name: 'Puma Soft Ride', slug: 'puma-soft-ride-25', category_id: 1, brand_id: 3, cost: 1000000, retail: 1790000, images: '["https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800"]' },
+    { id: 26, sku: 'PUMA-CA-001', name: 'Puma Clyde All Pro', slug: 'puma-clyde-all-pro-26', category_id: 3, brand_id: 3, cost: 1500000, retail: 2590000, images: '["https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800"]' },
+    { id: 27, sku: 'PUMA-SUEDE-001', name: 'Puma Suede Classic', slug: 'puma-suede-classic-27', category_id: 2, brand_id: 3, cost: 700000, retail: 1290000, images: '["https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800"]' },
+    { id: 28, sku: 'PUMA-RS-001', name: 'Puma RS-X', slug: 'puma-rs-x-28', category_id: 2, brand_id: 3, cost: 1200000, retail: 2090000, images: '["https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800"]' },
+    { id: 29, sku: 'PUMA-FTR-001', name: 'Puma Future Rider Play', slug: 'puma-future-rider-play-29', category_id: 2, brand_id: 3, cost: 1100000, retail: 1890000, images: '["https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800"]' },
+    { id: 30, sku: 'PUMA-DVR-001', name: 'Puma Deviate Nitro 2', slug: 'puma-deviate-nitro-2-30', category_id: 1, brand_id: 3, cost: 2300000, retail: 3890000, images: '["https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800"]' },
+    { id: 31, sku: 'NB-327-001', name: 'New Balance 327', slug: 'new-balance-327-31', category_id: 2, brand_id: 4, cost: 1100000, retail: 1990000, images: '["https://images.unsplash.com/photo-1539185441755-769473a23570?w=800"]' },
+    { id: 32, sku: 'NB-550-001', name: 'New Balance 550', slug: 'new-balance-550-32', category_id: 2, brand_id: 4, cost: 1200000, retail: 2190000, images: '["https://images.unsplash.com/photo-1539185441755-769473a23570?w=800"]' },
+    { id: 33, sku: 'NB-2002R-001', name: 'New Balance 2002R', slug: 'new-balance-2002r-33', category_id: 1, brand_id: 4, cost: 1900000, retail: 3290000, images: '["https://images.unsplash.com/photo-1539185441755-769473a23570?w=800"]' },
+    { id: 34, sku: 'NB-1080-001', name: 'New Balance Fresh Foam 1080v12', slug: 'new-balance-fresh-foam-1080v12-34', category_id: 1, brand_id: 4, cost: 2200000, retail: 3690000, images: '["https://images.unsplash.com/photo-1539185441755-769473a23570?w=800"]' },
+    { id: 35, sku: 'NB-9060-001', name: 'New Balance 9060', slug: 'new-balance-9060-35', category_id: 2, brand_id: 4, cost: 1700000, retail: 2890000, images: '["https://images.unsplash.com/photo-1539185441755-769473a23570?w=800"]' },
+    { id: 36, sku: 'NB-990V6-001', name: 'New Balance 990v6', slug: 'new-balance-990v6-36', category_id: 1, brand_id: 4, cost: 3100000, retail: 4990000, images: '["https://images.unsplash.com/photo-1539185441755-769473a23570?w=800"]' },
+    { id: 37, sku: 'CONV-CD-001', name: "Converse Chuck 70", slug: 'converse-chuck-70-37', category_id: 2, brand_id: 5, cost: 800000, retail: 1390000, images: '["https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=800"]' },
+    { id: 38, sku: 'CONV-RN-001', name: 'Converse Run Star Hike', slug: 'converse-run-star-hike-38', category_id: 2, brand_id: 5, cost: 1100000, retail: 1890000, images: '["https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=800"]' },
+    { id: 39, sku: 'CONV-ONE-001', name: 'Converse One Star', slug: 'converse-one-star-39', category_id: 2, brand_id: 5, cost: 700000, retail: 1190000, images: '["https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=800"]' },
+    { id: 40, sku: 'CONV-ADD-001', name: "Converse Chuck Taylor All Star Elevate", slug: 'converse-chuck-taylor-all-star-elevate-40', category_id: 2, brand_id: 5, cost: 900000, retail: 1590000, images: '["https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=800"]' },
+    { id: 41, sku: 'VANS-OS-001', name: 'Vans Old Skool', slug: 'vans-old-skool-41', category_id: 2, brand_id: 6, cost: 600000, retail: 1090000, images: '["https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800"]' },
+    { id: 42, sku: 'VANS-AUTH-001', name: 'Vans Authentic', slug: 'vans-authentic-42', category_id: 2, brand_id: 6, cost: 500000, retail: 890000, images: '["https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800"]' },
+    { id: 43, sku: 'VANS-SK8-001', name: 'Vans Sk8-Hi', slug: 'vans-sk8-hi-43', category_id: 2, brand_id: 6, cost: 700000, retail: 1190000, images: '["https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800"]' },
+    { id: 44, sku: 'VANS-ERA-001', name: 'Vans Era', slug: 'vans-era-44', category_id: 2, brand_id: 6, cost: 550000, retail: 990000, images: '["https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800"]' },
+    { id: 45, sku: 'VANS-CL-001', name: 'Vans Classic Slip-On', slug: 'vans-classic-slip-on-45', category_id: 2, brand_id: 6, cost: 500000, retail: 850000, images: '["https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800"]' },
+    { id: 46, sku: 'VANS-KNM-001', name: 'Vans Knu School', slug: 'vans-knu-school-46', category_id: 2, brand_id: 6, cost: 800000, retail: 1390000, images: '["https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800"]' },
+    { id: 47, sku: 'NIKE-VFN-001', name: 'Nike ZoomX Vaporfly NEXT% 2', slug: 'nike-zoomx-vaporfly-next-2-47', category_id: 1, brand_id: 1, cost: 3400000, retail: 5490000, images: '["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800"]' },
+    { id: 48, sku: 'NIKE-FREE-001', name: 'Nike Free Run 5.0', slug: 'nike-free-run-5-0-48', category_id: 1, brand_id: 1, cost: 1300000, retail: 2290000, images: '["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800"]' },
+    { id: 49, sku: 'ADI-1K-001', name: 'Adidas 1K Street', slug: 'adidas-1k-street-49', category_id: 2, brand_id: 2, cost: 1600000, retail: 2790000, images: '["https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800"]' },
+    { id: 50, sku: 'ADI-RDY-001', name: 'Adidas Run 70s', slug: 'adidas-run-70s-50', category_id: 2, brand_id: 2, cost: 1200000, retail: 2090000, images: '["https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800"]' },
+  ];
+
+  for (const p of productSeedData) {
+    const wholesale = Math.round(p.retail * 0.8);
+    const weight = 300 + Math.floor(Math.random() * 200);
+    const viewCount = Math.floor(Math.random() * 2000);
+    const soldCount = Math.floor(Math.random() * 200);
+    try {
+      wrapper.prepare(`INSERT INTO products (id, sku, name, slug, description, category_id, brand_id, cost_price, retail_price, wholesale_price, barcode, weight, images, status, view_count, sold_count) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active', ?, ?)`).run(p.id, p.sku, p.name, p.slug, 'Premium quality footwear', p.category_id, p.brand_id, p.cost, p.retail, wholesale, generateBarcode(), weight, p.images, viewCount, soldCount);
+    } catch (e) { /* skip duplicate */ }
+  }
+
   // Product Variants (IDs 1-62) - explicit IDs
   const variants: Array<{id: number, product_id: number, sku: string, barcode: string, size: string, color: string, hex: string}> = [];
   let vid = 1;
@@ -489,10 +547,12 @@ export const seedDatabase = async () => {
       for (const s of vd.sizes) {
         const vsku = `${vd.sku}-${s}-${c.name.replace(/[\s/]/g,'')}`;
         const vbc = generateBarcode();
-        wrapper.prepare(`INSERT INTO product_variants (id, product_id, sku, barcode, size, color, color_hex, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'active')`).run(vid, vd.pid, vsku, vbc, s, c.name, c.hex);
-        const qty = Math.floor(Math.random() * 50) + 10;
-        wrapper.prepare(`INSERT INTO inventory (id, variant_id, quantity, reserved, min_stock_level, max_stock_level) VALUES (?, ?, ?, 0, 5, 100)`).run(vid, vid, qty);
-        variants.push({id: vid, product_id: vd.pid, sku: vsku, barcode: vbc, size: s, color: c.name, hex: c.hex});
+        try {
+          wrapper.prepare(`INSERT INTO product_variants (id, product_id, sku, barcode, size, color, color_hex, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'active')`).run(vid, vd.pid, vsku, vbc, s, c.name, c.hex);
+          const qty = Math.floor(Math.random() * 50) + 10;
+          wrapper.prepare(`INSERT INTO inventory (id, variant_id, quantity, reserved, min_stock_level, max_stock_level) VALUES (?, ?, ?, 0, 5, 100)`).run(vid, vid, qty);
+          variants.push({id: vid, product_id: vd.pid, sku: vsku, barcode: vbc, size: s, color: c.name, hex: c.hex});
+        } catch (e) { /* skip duplicate */ }
         vid++;
       }
     }
