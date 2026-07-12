@@ -1,6 +1,6 @@
 # ShopPro — Hệ Thống Quản Lý Bán Giày (Offline + Online)
 
-> Đồ án môn **Phân Tích Thiết Kế Hệ Thống Thông Tin** — Shop quản lý bán giày tích hợp cửa hàng (POS) và online.
+> **Shop quản lý bán giày tích hợp cửa hàng (POS) và online** — .
 
 ---
 
@@ -154,8 +154,4 @@ Tạo đơn nhập → Duyệt đơn → Nhận hàng → Cập nhật tồn kho
 | **Đề tài** | Hệ thống quản lý bán giày ShopPro |
 | **Phiên bản** | 1.0 |
 | **Ngày hoàn thành** | 2026-06-09 |
-| **Tác giả** | Sinh viên |
-
----
-
-> Tài liệu này phục vụ cho mục đích học tập và đồ án môn Phân Tích Thiết Kế Hệ Thống Thông Tin.
+| **Tác giả** | LE VU HAI |
